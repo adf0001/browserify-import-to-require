@@ -1,0 +1,32 @@
+{
+  "name": "browserify-import-to-require",
+  "version": "0.1.0",
+  "description": "a browserify transform to transfer import statement to require statement",
+  "main": "browserify-import-to-require.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "browserify",
+    "transform",
+    "import",
+    "require"
+  ],
+  "author": "fwg",
+  "license": "ISC",
+  "dependencies": {
+    "browserify-transform-tools": "^1.7.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adf0001/browserify-import-to-require.git"
+  },
+  "bugs": {
+    "url": "https://github.com/adf0001/browserify-import-to-require/issues"
+  },
+  "homepage": "https://github.com/adf0001/browserify-import-to-require#readme"
+}
