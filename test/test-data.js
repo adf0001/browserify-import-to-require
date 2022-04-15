@@ -6,17 +6,42 @@ var fs = require("fs");
 
 module.exports = {
 
-	"browserify_import_to_require": function (done) {
+	"default": function (done) {
 		if (typeof window !== "undefined") throw "disable for browser";
 
 		var fn = __dirname + "/sample/sample.js";
 		var txt = fs.readFileSync(fn);
 
-		browserify_transform_tools.runTransform(browserify_import_to_require, fn, txt,
+		browserify_transform_tools.runTransform(browserify_import_to_require, fn,
+			{ content: txt },
 			function (err, transformed) {
-				// Verify transformed is what we expect...
+				if (err) {
+					console.log(err);
+					return;
+				}
 				console.log("----------------");
-				console.log(err, transformed);
+				console.log(transformed);
+			}
+		);
+
+		done(false);
+	},
+
+	"sourceComment": function (done) {
+		if (typeof window !== "undefined") throw "disable for browser";
+
+		var fn = __dirname + "/sample/sample.js";
+		var txt = fs.readFileSync(fn);
+
+		browserify_transform_tools.runTransform(browserify_import_to_require, fn,
+			{ content: txt, config: { debugMatch: true, sourceComment: true } },
+			function (err, transformed) {
+				if (err) {
+					console.log(err);
+					return;
+				}
+				console.log("----------------");
+				console.log(transformed);
 			}
 		);
 
