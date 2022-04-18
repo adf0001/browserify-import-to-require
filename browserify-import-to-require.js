@@ -116,8 +116,11 @@ function transfer(source, sourceComment) {
 	}
 }
 
+//var debugFlag=1;
+
 module.exports = browserify_transform_tools.makeFalafelTransform(
-	"import-to-require", { falafelOptions: { sourceType: 'module', ecmaVersion: ECMA_VERSION, } },
+	"import-to-require",
+	{ falafelOptions: { sourceType: 'module', ecmaVersion: ECMA_VERSION }, jsFilesOnly: true },
 	function (node, transformOptions, done) {
 		/*
 		console.log("-----------------------");
@@ -126,11 +129,21 @@ module.exports = browserify_transform_tools.makeFalafelTransform(
 		console.log(node);
 		*/
 
+		/*
+		if(debugFlag){
+			console.log(transformOptions.config);
+			debugFlag=0;
+		}
+		*/
+
 		if (node.type === 'ImportDeclaration') {
 			var source = node.source();
-			if (transformOptions.config && transformOptions.config.debugMatch) console.log("match: " + source);
+			if (transformOptions.config && transformOptions.config.debugMatch) {
+				console.log("match: " + source);
+			}
 			//console.log("clear: "+removeComment(node.source()));
-			var newSource = transfer(source, transformOptions.config && transformOptions.config.sourceComment)
+			var newSource = transfer(source, transformOptions.config && transformOptions.config.sourceComment);
+
 			if (newSource && source !== newSource) {
 				//console.log("new  : "+newSource);
 				node.update(newSource);

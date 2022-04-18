@@ -11,6 +11,7 @@ module.exports = {
 
 		var fn = __dirname + "/sample/sample.js";
 		var txt = fs.readFileSync(fn);
+		//var txt = fs.readFileSync(__dirname+"/../package.json");
 
 		browserify_transform_tools.runTransform(browserify_import_to_require, fn,
 			{ content: txt },
@@ -47,7 +48,7 @@ module.exports = {
 
 		done(false);
 	},
-
+	
 };
 
 // for html page

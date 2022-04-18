@@ -1,7 +1,7 @@
 # browserify-import-to-require
 A browserify transform, transfering static import statement to require statement.
 
-# Accept format
+# Accepted format
 ```javascript
 
 //refer https://262.ecma-international.org/11.0/#sec-imports
@@ -21,7 +21,7 @@ import "module-name";
 
 # Limitation
 
-* do not transfer dynamic import-calling, that is, `import(...)`;
+* do not transfer dynamic import-calling, that is, `import(...)` with round brackets;
 
 # Install
 ```
@@ -29,8 +29,17 @@ npm install browserify-import-to-require
 ```
 
 # Usage
-```bat
+```shell
 browserify ... -g [ "browserify-import-to-require"  --debugMatch --sourceComment ] ...
+
+# or with "appliesTo.files"/"appliesTo.includeExtensions" arguments for browserify-transform-tools
+# default "appliesTo.jsFilesOnly"
+
+	# require array type, at least 2 items in Windows, refer browserify-transform-tools and minimist.
+	-g [ "browserify-import-to-require" --appliesTo [ --files my.js --files my2.js ] ]
+
+	-g [ "browserify-import-to-require" --appliesTo [ --includeExtensions .js --includeExtensions .js ] ]
+
 ```
 
 # Samples
