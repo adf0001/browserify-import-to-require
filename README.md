@@ -30,6 +30,10 @@ npm install browserify-import-to-require
 
 # Usage
 ```shell
+browserify ... -g [ "browserify-import-to-require" ] ...
+
+# or
+
 browserify ... -g [ "browserify-import-to-require"  --debugMatch --sourceComment ] ...
 
 # or with "appliesTo.files"/"appliesTo.includeExtensions" arguments for browserify-transform-tools

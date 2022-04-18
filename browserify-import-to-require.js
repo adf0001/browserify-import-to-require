@@ -3,6 +3,7 @@
 
 var browserify_transform_tools = require('browserify-transform-tools');
 var acorn = require('acorn');
+var falafel = require('falafel');
 
 function formatNamedImports(s, spaceName, moduleName) {
 	var sn = spaceName || moduleName.slice(1, -1).replace(/\W/g, "_");
@@ -116,40 +117,55 @@ function transfer(source, sourceComment) {
 	}
 }
 
-//var debugFlag=1;
+var regImport = /\bimport\b/;
+var falafelOptions = { sourceType: 'module', ecmaVersion: ECMA_VERSION };
 
-module.exports = browserify_transform_tools.makeFalafelTransform(
-	"import-to-require",
-	{ falafelOptions: { sourceType: 'module', ecmaVersion: ECMA_VERSION }, jsFilesOnly: true },
-	function (node, transformOptions, done) {
-		/*
-		console.log("-----------------------");
-		console.log(node.type);
-		console.log(node.source());
-		console.log(node);
-		*/
+//var debugFlag = 1;
 
+module.exports = browserify_transform_tools.makeStringTransform(
+	"import-to-require", { jsFilesOnly: true },
+	function (content, transformOptions, done) {
 		/*
-		if(debugFlag){
+		if (debugFlag) {
+			console.log(transformOptions);
 			console.log(transformOptions.config);
-			debugFlag=0;
+			console.log(transformOptions.configData);
+			debugFlag = 0;
 		}
 		*/
 
-		if (node.type === 'ImportDeclaration') {
-			var source = node.source();
-			if (transformOptions.config && transformOptions.config.debugMatch) {
-				console.log("match: " + source);
-			}
-			//console.log("clear: "+removeComment(node.source()));
-			var newSource = transfer(source, transformOptions.config && transformOptions.config.sourceComment);
+		if (regImport.test(content)) {	//check if import keyword existed, then call falafel;
 
-			if (newSource && source !== newSource) {
-				//console.log("new  : "+newSource);
-				node.update(newSource);
-			}
+			var debugMatch = transformOptions.config && transformOptions.config.debugMatch;
+			var sourceComment = transformOptions.config && transformOptions.config.sourceComment;
+
+			if (debugMatch) { console.log("match file: " + transformOptions.file); }
+
+			content = falafel(content, falafelOptions,
+				function (node) {
+					/*
+					console.log("-----------------------");
+					console.log(node.type);
+					console.log(node.source());
+					console.log(node);
+					*/
+
+					if (node.type === 'ImportDeclaration') {
+						var source = node.source();
+
+						if (debugMatch) { console.log("match line: " + source); }
+
+						//console.log("clear: "+removeComment(node.source()));
+						var newSource = transfer(source, sourceComment);
+
+						if (newSource && source !== newSource) {
+							//console.log("new  : "+newSource);
+							node.update(newSource);
+						}
+					}
+				}
+			);
 		}
-
-		done();
+		done(null, content);
 	}
 );
