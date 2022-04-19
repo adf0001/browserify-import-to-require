@@ -4,16 +4,17 @@ var browserify_import_to_require = require("../browserify-import-to-require.js")
 var browserify_transform_tools = require('browserify-transform-tools');
 var fs = require("fs");
 
+var sampleFile = __dirname + "/../node_modules/static-import-to-require/test/sample/sample.js";
+
 module.exports = {
 
 	"default": function (done) {
 		if (typeof window !== "undefined") throw "disable for browser";
 
-		var fn = __dirname + "/sample/sample.js";
-		var txt = fs.readFileSync(fn);
+		var txt = fs.readFileSync(sampleFile);
 		//var txt = fs.readFileSync(__dirname+"/../package.json");
 
-		browserify_transform_tools.runTransform(browserify_import_to_require, fn,
+		browserify_transform_tools.runTransform(browserify_import_to_require, sampleFile,
 			{ content: txt },
 			function (err, transformed) {
 				if (err) {
@@ -31,11 +32,10 @@ module.exports = {
 	"sourceComment": function (done) {
 		if (typeof window !== "undefined") throw "disable for browser";
 
-		var fn = __dirname + "/sample/sample.js";
-		var txt = fs.readFileSync(fn);
+		var txt = fs.readFileSync(sampleFile);
 
-		browserify_transform_tools.runTransform(browserify_import_to_require, fn,
-			{ content: txt, config: { debugMatch: true, sourceComment: true } },
+		browserify_transform_tools.runTransform(browserify_import_to_require, sampleFile,
+			{ content: txt, config: { debugInfo: true, sourceComment: true } },
 			function (err, transformed) {
 				if (err) {
 					console.log(err);
